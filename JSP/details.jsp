@@ -15,7 +15,7 @@
         body {
             font-family: "Zen Kaku Gothic Antique", sans-serif;
             background-image: url("../images/Desktop\ -\ 1.svg");
-            background-size: cover;
+            background-size: cover;     
             background-position: center;
             color: #fff;
             margin: 0;
