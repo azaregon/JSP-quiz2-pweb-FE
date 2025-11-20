@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Project</title>
+    <title>Edit Existing Project</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,8 +18,8 @@
 <body>
     <div class="modal">
         <div class="modal-content">
-            <h2>Create New Project</h2>
-            <p class="subtitle">Fill in the details to create a new project</p>
+            <h2>Edit Existing Project</h2>
+            <p class="subtitle">Fill in the details to edit a existing project</p>
 
             <div id="errorMessage" class="error-box" style="display:none;"></div>
             <div id="successMessage" class="success-message" style="display:none;"></div>
@@ -89,13 +89,15 @@
                 <!-- Buttons -->
                 <div class="actions">
                     <a href="/akusigmak/JSP/projects.jsp" class="cancel-btn">Cancel</a>
-                    <button type="submit" class="create-btn" id="submitBtn">Create Project</button>
+                    <button type="submit" class="create-btn" id="submitBtn">Edit Project</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+    let currentProjectId = null; // Store the project ID being edited
+
     $(document).ready(function() {
         // Check authentication
         if (!TokenAPI.isAuthenticated()) {
@@ -103,8 +105,16 @@
             return;
         }
 
-        // Load statuses and technologies
-        loadFormData();
+        // Get project ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        currentProjectId = urlParams.get('id');
+
+        // Load statuses and technologies first, then load project data if ID exists
+        loadFormData().then(() => {
+            if (currentProjectId) {
+                loadProjectData(currentProjectId);
+            }
+        });
 
         // Form submission
         $('#createProjectForm').on('submit', async function(e) {
@@ -143,6 +153,134 @@
         } catch (error) {
             console.error('Error loading form data:', error);
             // Continue anyway - user can still try to submit
+        }
+    }
+
+    // NEW: Load project data when editing
+    async function loadProjectData(projectId) {
+        try {
+            const response = await ProjectAPI.getById(projectId);
+            if (response.success && response.data) {
+                populateEditForm(response.data);
+            } else {
+                console.error('Failed to load project:', response.error_message);
+            }
+        } catch (error) {
+            console.error('Error loading project:', error);
+        }
+    }
+
+    // NEW: Populate form with project data
+    function populateEditForm(project) {
+        // Set basic fields
+        $('#name').val(project.project_name || project.name || '');
+        $('#status').val(project.PROJECT_STATUS_ID || project.status_id || '');
+        $('#description').val(project.project_desc || project.description || '');
+        
+        // Set dates - convert to YYYY-MM-DD format if needed
+        const startDate = formatDateForInput(project.project_start || project.start_date);
+        const endDate = formatDateForInput(project.project_date || project.end_date);
+        $('#start_date').val(startDate);
+        $('#end_date').val(endDate);
+
+        // Populate project links
+        const projectLinks = project.project_links || project.links || {};
+        const linkInputsContainer = document.getElementById('link-inputs');
+        
+        // Clear existing link inputs (except the template)
+        linkInputsContainer.querySelectorAll('.link-pair').forEach(el => el.remove());
+        
+        // Populate first link
+        const linkKeys = Object.keys(projectLinks);
+        if (linkKeys.length > 0) {
+            const firstKey = linkKeys[0];
+            linkInputsContainer.querySelector('input[name="link_key"]').value = firstKey;
+            linkInputsContainer.querySelector('input[name="link_value"]').value = projectLinks[firstKey];
+            
+            // Add additional links
+            for (let i = 1; i < linkKeys.length; i++) {
+                const div = document.createElement('div');
+                div.classList.add('inline-input', 'link-pair');
+                div.innerHTML = `
+                    <input name="link_key" type="text" placeholder="e.g., website" value="${linkKeys[i]}" />
+                    <input name="link_value" type="text" placeholder="https://..." value="${projectLinks[linkKeys[i]]}" />
+                    <button type="button" class="add-btn" onclick="this.parentNode.remove()">−</button>
+                `;
+                linkInputsContainer.appendChild(div);
+            }
+        }
+
+        // Populate technologies
+        const technologies = project.technologies || project.project_tech_stacks || [];
+        const techInputsContainer = document.getElementById('tech-inputs');
+        const firstTechSelect = techInputsContainer.querySelector('select[name="technologies[]"]');
+        
+        // Clear existing tech selects (except the template)
+        techInputsContainer.querySelectorAll('.inline-input').forEach(el => el.remove());
+        
+        if (technologies.length > 0) {
+            // Set first technology
+            const firstTechId = technologies[0].ID || technologies[0].id;
+            firstTechSelect.value = firstTechId;
+            
+            // Add additional technologies
+            for (let i = 1; i < technologies.length; i++) {
+                const div = document.createElement('div');
+                div.classList.add('inline-input');
+                const techId = technologies[i].ID || technologies[i].id;
+                const techName = technologies[i].tech_name || technologies[i].name;
+                
+                div.innerHTML = `
+                    <select name="technologies[]">
+                        ${firstTechSelect.innerHTML.replace('<option value="" disabled="" selected="">Select Tech</option>', '')}
+                    </select>
+                    <button type="button" class="add-btn" onclick="this.parentNode.remove()">−</button>
+                `;
+                const newSelect = div.querySelector('select');
+                newSelect.value = techId;
+                techInputsContainer.appendChild(div);
+            }
+        }
+
+        // Populate collaborators
+        const collaborators = project.collaborators || [];
+        const collabContainer = document.getElementById('collaborator-inputs');
+        
+        // Clear existing collaborator inputs (except the template)
+        collabContainer.querySelectorAll('.collaborator-item').forEach(el => el.remove());
+        
+        if (collaborators.length > 0) {
+            // Set first collaborator
+            collabContainer.querySelector('input[name="collaborators[]"]').value = collaborators[0].user_name || collaborators[0];
+            
+            // Add additional collaborators
+            for (let i = 1; i < collaborators.length; i++) {
+                const collabName = collaborators[i].user_name || collaborators[i];
+                const div = document.createElement('div');
+                div.classList.add('collaborator-item');
+                div.innerHTML = `
+                    <input name="collaborators[]" type="text" placeholder="Enter Collaborator" value="${collabName}" />
+                    <button type="button" class="add-btn" onclick="this.parentNode.remove()">−</button>
+                `;
+                collabContainer.appendChild(div);
+            }
+        }
+
+        // Update button text
+        $('#submitBtn').text('Update Project');
+    }
+
+    // Helper function to format date for input[type="date"]
+    function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        try {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        } catch (e) {
+            return dateString;
         }
     }
 
@@ -197,21 +335,39 @@
         $submitBtn.prop('disabled', true).text('Creating...');
 
         try {
-            const response = await ProjectAPI.create(projectData);
-            
-            if (response.success) {
-                $successMsg.text('Project created successfully!').show();
-                setTimeout(() => {
-                    window.location.href = '/akusigmak/JSP/projects.jsp';
-                }, 1500);
+            // MODIFIED: Use PUT if editing, POST if creating
+            let response;
+            if (currentProjectId) {
+                // Update existing project
+                $submitBtn.text('Updating...');
+                response = await ProjectAPI.update(currentProjectId, projectData);
+                
+                if (response.success) {
+                    $successMsg.text('Project updated successfully!').show();
+                    setTimeout(() => {
+                        window.location.href = `/akusigmak/JSP/details.jsp?id=${currentProjectId}`;
+                    }, 1500);
+                } else {
+                    $errorMsg.html(`<strong>Error:</strong> ${response.error_message || 'Failed to update project'}`).show();
+                }
             } else {
-                $errorMsg.html(`<strong>Error:</strong> ${response.error_message || 'Failed to create project'}`).show();
+                // Create new project
+                response = await ProjectAPI.create(projectData);
+                
+                if (response.success) {
+                    $successMsg.text('Project created successfully!').show();
+                    setTimeout(() => {
+                        window.location.href = '/akusigmak/JSP/projects.jsp';
+                    }, 1500);
+                } else {
+                    $errorMsg.html(`<strong>Error:</strong> ${response.error_message || 'Failed to create project'}`).show();
+                }
             }
         } catch (error) {
-            console.error('Error creating project:', error);
-            $errorMsg.html(`<strong>Error:</strong> ${error.message || 'An error occurred while creating the project'}`).show();
+            console.error('Error submitting project:', error);
+            $errorMsg.html(`<strong>Error:</strong> ${error.message || 'An error occurred'}`).show();
         } finally {
-            $submitBtn.prop('disabled', false).text('Create Project');
+            $submitBtn.prop('disabled', false).text(currentProjectId ? 'Update Project' : 'Create Project');
         }
     }
 
@@ -243,12 +399,12 @@
 
     function addCollaborator() {
         const div = document.createElement('div');
+        div.classList.add('collaborator-item');
         div.innerHTML = `
             <input name="collaborators[]" type="text" placeholder="Enter Collaborator" />
             <button type="button" class="add-btn" onclick="this.parentNode.remove()">−</button>
         `;
-        document.getElementById('collaborator-inputs').appendChild(div.firstElementChild);
-        document.getElementById('collaborator-inputs').appendChild(div.lastElementChild);
+        document.getElementById('collaborator-inputs').appendChild(div);
     }
     </script>
 </body>

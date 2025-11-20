@@ -19,15 +19,15 @@
     <header>
         <div class="top-bar">
             <div class="profile-icon">
-                <a href="profile.jsp">
-                    <img src="${pageContext.request.contextPath}/images/Profile\ Buttons.svg" alt="Profile Icon">
+                <a href="/akusigmak/JSP/profile.jsp">
+                    <img src="${pageContext.request.contextPath}/images/Profile%20Buttons.svg" alt="Profile Icon">
                 </a>
             </div>
 
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search project">
                 <button id="searchBtn" type="button" class="btn-primary" style="cursor: pointer">
-                    <img src="${pageContext.request.contextPath}/images/Oval.png" alt="Search Icon" class="search-icon">
+                    <img src="${pageContext.request.contextPath}/images/Oval.svg" alt="Search Icon" class="search-icon">
                 </button>
             </div>
 
@@ -58,7 +58,7 @@
     $(document).ready(function() {
         // Check if user is authenticated
         if (!TokenAPI.isAuthenticated()) {
-            window.location.href = 'login.jsp';
+            window.location.href = '/akusigmak/JSP/login.jsp';
             return;
         }
 
@@ -111,7 +111,7 @@
         `);
 
         $('#addProjectBtn').on('click', function() {
-            window.location.href = 'create.jsp';
+            window.location.href = '/akusigmak/JSP/create.jsp';
         });
 
         $('#logoutBtn').on('click', async function() {
@@ -122,7 +122,7 @@
             }
             TokenAPI.removeToken();
             StorageAPI.clearUser();
-            window.location.href = 'login.jsp';
+            window.location.href = '/akusigmak/JSP/login.jsp';
         });
     }
 

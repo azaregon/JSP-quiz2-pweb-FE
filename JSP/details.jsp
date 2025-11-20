@@ -412,7 +412,7 @@
     }
 
     function editProject(projectId) {
-        window.location.href = `../edit.jsp?id=${projectId}`;
+        window.location.href = `/akusigmak/JSP/Edit.jsp?id=${projectId}`;
     }
 
     async function deleteProject(projectId) {
@@ -424,7 +424,7 @@
             const response = await ProjectAPI.delete(projectId);
             if (response.success) {
                 alert('Project deleted successfully');
-                window.location.href = '../projects.jsp';
+                window.location.href = '/akusigmak/JSP/projects.jsp';
             } else {
                 alert('Error deleting project: ' + (response.error_message || 'Unknown error'));
             }

@@ -206,7 +206,7 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search project">
                 <button id="searchBtn" type="button" class="btn-primary">
-                    <img src="${pageContext.request.contextPath}/images/Oval.png" alt="Search Icon" class="search-icon">
+                    <img src="${pageContext.request.contextPath}/images/Oval.svg" alt="Search Icon" class="search-icon">
                 </button>
             </div>
 
@@ -247,7 +247,7 @@
     <script>
     $(document).ready(function() {
         if (!TokenAPI.isAuthenticated()) {
-            window.location.href = 'auth/login.jsp';
+            window.location.href = '/akusigmak/JSP/login.jsp';
             return;
         }
 
@@ -270,7 +270,7 @@
             }
             TokenAPI.removeToken();
             StorageAPI.clearUser();
-            window.location.href = 'auth/login.jsp';
+            window.location.href = '/akusigmak/JSP/login.jsp';
         });
     }
 

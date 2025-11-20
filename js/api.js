@@ -97,7 +97,7 @@ const ProjectAPI = {
     },
 
     delete: async (projectId) => {
-        return apiRequest(`/project/${projectId}`, 'DELETE');
+        return apiRequest(`/project/delete/${projectId}`, 'DELETE');
     }
 };
 

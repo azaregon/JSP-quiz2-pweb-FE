@@ -27,7 +27,7 @@
             <div class="login-row login-password">
                 <input id="password" name="password" type="password" placeholder="Password" required />
                 <button type="button" class="password-toggle" aria-label="Toggle password visibility" aria-pressed="false">
-                    <img src="${pageContext.request.contextPath}/images/eye.png" width="20" height="20" alt="show password" />
+                    <img src="${pageContext.request.contextPath}/images/eye.sv" width="20" height="20" alt="show password" />
                 </button>
             </div>
 
@@ -36,7 +36,7 @@
             </div>
 
             <div class="login-row login-signup">
-                 Don't have an account? <a href="register.jsp">Sign up here!</a>
+                 Don't have an account? <a href="/akusigmak/JSP/register.jsp">Sign up here!</a>
             </div>
         </form>
     </div>
@@ -106,7 +106,7 @@ $(document).ready(function(){
                 }
                 
                 // Redirect ke halaman utama
-                window.location.href = 'projects.jsp';
+                window.location.href = '/akusigmak/JSP/projects.jsp';
             } else {
                 $errorMsg.text(response.error_message || 'Login gagal').show();
             }

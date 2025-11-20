@@ -42,13 +42,13 @@
             <div class="password-row">
                 <input id="password" name="password" type="password" placeholder="Password" required />
                 <button type="button" class="password-toggle" aria-label="Toggle password visibility" aria-pressed="false">
-                    <img src="${pageContext.request.contextPath}/images/eye.png" width="20" height="20" alt="show password" />
+                    <img src="${pageContext.request.contextPath}/images/eye.svg" width="20" height="20" alt="show password" />
                 </button>
             </div>
 
             <!-- Terms -->
             <div class="terms-row">
-                <input type="checkbox" id="agree-terms" name="terms" required />
+                <input type="checkbox" id="agree-terms" name="terms" />
                 <label for="agree-terms" class="terms-text">
                     I agree <a href="https://lipsum.com/feed/html" class="terms-text-link" target="_blank">Terms & Conditions</a>
                 </label>
@@ -56,7 +56,7 @@
 
             <!-- Submit -->
             <div class="register-action">
-                <button type="submit" class="register-btn" id="register-btn">Create Account</button>
+                <button type="submit" class="register-btn" id="register-btn" disabled>Create Account</button>
             </div>
         </form>
     </div>
@@ -90,6 +90,10 @@
             if(!visible) strike().appendTo(this);
         });
 
+        // Register button reference
+        const $registerBtn = $('#register-btn');
+        $registerBtn.prop('disabled', false);
+
         // Form submission
         $('#registerForm').on('submit', async function(e) {
             e.preventDefault();
@@ -98,24 +102,18 @@
             const lastName = $('#last_name').val().trim();
             const username = $('#user_name').val().trim();
             const password = $('#password').val();
-            const termsAgreed = $('#agree-terms').is(':checked');
             const $errorMsg = $('#errorMessage');
 
             // Validation
             const errors = Validation.validateRegisterForm(username, password, firstName, lastName);
-            if (!termsAgreed) {
-                errors.push('Anda harus setuju dengan Terms & Conditions');
-            }
-
             if (errors.length > 0) {
                 $errorMsg.text(errors.join(', ')).show();
                 return;
             }
 
             // Show loading state
-            const $btn = $('#register-btn');
-            const originalText = $btn.html();
-            $btn.prop('disabled', true).html('Loading...');
+            const originalText = $registerBtn.html();
+            $registerBtn.prop('disabled', true).html('Loading...');
 
             try {
                 const response = await AuthAPI.register(username, password, firstName, lastName);
@@ -137,7 +135,7 @@
                 console.error('Register error:', error);
                 $errorMsg.text(error.message || 'Terjadi kesalahan saat pendaftaran').show();
             } finally {
-                $btn.prop('disabled', false).html(originalText);
+                $registerBtn.prop('disabled', false).html(originalText);
             }
         });
 
