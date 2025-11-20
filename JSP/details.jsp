@@ -261,22 +261,64 @@
 <body>
     <header>  
         <a href="javascript:history.back()" class="back-link">
-            <img class="logo" src="${pageContext.request.contextPath}/images/Group\ 32.svg" alt="Logo">
+            <img class="logo" src="${pageContext.request.contextPath}/images/Group%2032.svg" alt="Logo">
         </a> 
-        <img src="${pageContext.request.contextPath}/images/Status\ Done.svg" alt="Status Icon" class="status">
+        <img src="${pageContext.request.contextPath}/images/Status%20Done.svg" alt="Status Icon" class="status">
     </header>
 
     <main>
         <div id="loadingSpinner" class="loading-spinner">Loading project details...</div>
         <div id="errorMessage" class="error-message" style="display:none;"></div>
-        <div id="projectContent" style="display:none;"></div>
+
+        <!-- Static Project Detail Structure -->
+        <div id="projectContent" class="project-tab" style="display:none;">
+            <div class="project-header">
+                <div class="project-name-time">
+                    <h1 id="projectName"></h1>
+                    <div class="project-times-details">
+                        <img src="${pageContext.request.contextPath}/images/Vector Calendar.svg" alt="Calendar Icon" class="calendar-icon">
+                        <p id="projectDates" class="dates"></p>
+                    </div>
+                </div>
+                <div class="project-tab-buttons">
+                    <button id="editBtn" class="edit-btn">
+                        <img src="${pageContext.request.contextPath}/images/Vector edit.svg" alt="Edit">
+                    </button>
+                    <button id="deleteBtn" class="delete-btn">
+                        <img src="${pageContext.request.contextPath}/images/Vector delete.svg" alt="Delete">
+                    </button>
+                </div>
+            </div>
+
+            <p id="projectDescription" class="project-description"></p>
+
+            <div class="info-section">
+                <div class="technologies">
+                    <h4>Technologies</h4>
+                    <div id="technologiesList" class="tags"></div>
+                </div>
+                <div class="collaborator">
+                    <span style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <img src="${pageContext.request.contextPath}/images/Icon.svg" alt="Collaborator Icon" style="width: 20px;">
+                        <h4 style="margin: 0;">Collaborator</h4>
+                    </span>
+                    <div id="collaboratorsList" class="tags"></div>
+                </div>
+            </div>
+
+            <div id="linkSection" class="link-section">
+                <!-- Link button will be generated here -->
+            </div>
+
+            <hr>
+        </div>
     </main>
 
     <script>
     $(document).ready(function() {
         // Check authentication
         if (!TokenAPI.isAuthenticated()) {
-            window.location.href = 'login.jsp';
+            window.location.href = '${pageContext.request.contextPath}/JSP/login.jsp';
             return;
         }
 
@@ -284,7 +326,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id');
         console.log(projectId);
-        
         
         if (!projectId) {
             $('#loadingSpinner').hide();
@@ -304,10 +345,9 @@
             console.log("askdlkajdlkasdjalkdjlkj")
             const response = await ProjectAPI.getById(projectId);
             if (response.success && response.data) {
-                const project = response.data;
-                const html = renderProjectDetails(project);
-                $projectContent.html(html).show();
                 $loadingSpinner.hide();
+                populateProjectDetails(response.data);
+                $projectContent.show();
             } else {
                 throw new Error(response.error_message || 'Failed to load project');
             }
@@ -318,90 +358,61 @@
         }
     }
 
-    function renderProjectDetails(project) {
-        const contextPath = "${pageContext.request.contextPath}";
+    function populateProjectDetails(project) {
+        // --- Populate Header ---
+        $('#projectName').text(project.project_name || project.name || 'Unnamed Project');
+        const startDate = ProjectUIUtils.formatDate(project.project_start || project.start_date);
+        const endDate = ProjectUIUtils.formatDate(project.project_date || project.end_date);
+        $('#projectDates').text(`${startDate} - ${endDate}`);
 
-        const startDate = UIUtils.formatDate(project.project_start || project.start_date);
-        const endDate = UIUtils.formatDate(project.project_date || project.end_date);
+        // --- Populate Description ---
+        $('#projectDescription').text(project.project_desc || project.description || 'No description provided.');
+
+        // --- Populate Technologies ---
         const technologies = project.technologies || project.project_tech_stacks || [];
+        const $techList = $('#technologiesList').empty();
+        if (technologies.length > 0) {
+            technologies.forEach(tech => {
+                $techList.append($('<span>').text(tech.tech_name || tech));
+            });
+        } else {
+            $techList.append('<span>No tech listed</span>');
+        }
+
+        // --- Populate Collaborators ---
         const collaborators = project.collaborators || [];
+        const $collabList = $('#collaboratorsList').empty();
+        if (collaborators.length > 0) {
+            collaborators.forEach(collab => {
+                $collabList.append($('<span>').text(collab.user_name || collab));
+            });
+        } else {
+            $collabList.append('<span>None</span>');
+        }
+
+        // --- Populate Link Button ---
         const projectLink = project.project_links || project.link || '';
+        const $linkSection = $('#linkSection').empty();
+        const primaryLink = projectLink.website || projectLink.github;
+        if (primaryLink) {
+            const $link = $('<a>', { href: primaryLink, target: '_blank', class: 'link-btn' });
+            $link.append($('<img>', { src: '${pageContext.request.contextPath}/images/Vector Link copy.svg', alt: 'Link' }));
+            $link.append(' Link');
+            $linkSection.append($link);
+        } else {
+            const $button = $('<button>', { class: 'link-btn', disabled: true });
+            $button.append($('<img>', { src: '${pageContext.request.contextPath}/images/Vector Link copy.svg', alt: 'Link' }));
+            $button.append(' No Link');
+            $linkSection.append($button);
+        }
 
-        // Build technologies HTML separately to avoid JSP EL conflicts
-        const technologiesHtml = technologies.length > 0
-            ? technologies.map(tech => `<span>${escapeHtml(tech.tech_name || tech)}</span>`).join('')
-            : '<span>No tech listed</span>';
-
-        // Build collaborators HTML separately
-        const collaboratorsHtml = collaborators.length > 0
-            ? collaborators.map(col => `<span>${escapeHtml(col.user_name || col)}</span>`).join('')
-            : '<span>None</span>';
-
-        let html = `
-            <div class="project-tab">
-                <div class="project-header">
-                    <div class="project-name-time">
-                        <h1>\${escapeHtml(project.project_name || project.name)}</h1>
-                        <div class="project-times-details">
-                            <img src="\${contextPath}/images/Vector\ Calendar.svg" alt="Calendar Icon" class="calendar-icon">
-                            <p class="dates">\${escapeHtml(startDate)} -</p>
-                            <img src="\${contextPath}/images/Vector\ Time.svg" alt="Time Icon" class="time-icon">
-                            <p class="week-text">\${escapeHtml(endDate)}</p>
-                        </div>
-                    </div>
-                    <div class="project-tab-buttons">
-                        <button class="edit-btn" onclick="editProject(\${project.ID || project.id})">
-                            <img src="\${contextPath}/images/Vector\ edit.svg" alt="Edit">
-                        </button>
-                        <button class="delete-btn" onclick="deleteProject(\${project.ID || project.id})">
-                            <img src="\${contextPath}/images/Vector\ delete.svg" alt="Delete">
-                        </button>
-                    </div>
-                </div>
-
-                <p class="project-description">
-                    \${escapeHtml(project.project_desc || project.description || 'No description')}
-                </p>
-
-                <div class="info-section">
-                    <div class="technologies">
-                        <h4>Technologies</h4>
-                        <div class="tags">
-                            \${technologiesHtml}
-                        </div>
-                    </div>
-                    <div class="collaborator">
-                        <span style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <img src="\${contextPath}/images/Icon.svg" alt="Collaborator Icon" style="width: 20px;">
-                            <h4 style="margin: 0;">Collaborator</h4>
-                        </span>
-                        <div class="tags">\${collaboratorsHtml}</div>
-                    </div>
-                </div>
-
-                <div class="link-section">
-                    \${(projectLink && (projectLink.website || projectLink.github))
-                        ? `<a href="\${escapeHtml(projectLink.website || projectLink.github)}" target="_blank" class="link-btn">
-                                <img src="\${contextPath}/images/Vector Link copy.svg" alt="Link">
-                                Link
-                           </a>`
-                        : `<button class="link-btn" disabled>
-                                <img src="\${contextPath}/images/Vector Link copy.svg" alt="Link">
-                                No Link
-                           </button>`
-                    }
-                </div>
-
-                <hr>
-            </div>
-        `;
-
-        return html;
+        // --- Setup Buttons ---
+        $('#editBtn').on('click', () => editProject(project.ID || project.id));
+        $('#deleteBtn').on('click', () => deleteProject(project.ID || project.id));
     }
 
     function editProject(projectId) {
-        // TODO: Implement edit functionality
-        window.location.href = `edit.jsp?id=${projectId}`;
+        window.location.href = `../edit.jsp?id=${projectId}`;
     }
 
     async function deleteProject(projectId) {
@@ -413,7 +424,7 @@
             const response = await ProjectAPI.delete(projectId);
             if (response.success) {
                 alert('Project deleted successfully');
-                window.location.href = 'projects.jsp';
+                window.location.href = '../projects.jsp';
             } else {
                 alert('Error deleting project: ' + (response.error_message || 'Unknown error'));
             }
@@ -422,7 +433,7 @@
         }
     }
 
-    const UIUtils = {
+    const ProjectUIUtils = {
         formatDate: function(dateString) {
             if (!dateString) return 'N/A';
             try {
@@ -434,13 +445,6 @@
             }
         }
     };
-
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
     </script>
 </body>
 </html>
