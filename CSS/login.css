@@ -1,0 +1,229 @@
+body {
+	font-family: "Zen Kaku Gothic Antique", sans-serif;
+  	font-weight: 400;
+  	font-style: normal;
+}
+
+.bg-fullscreen{
+	min-height: 100vh;
+	min-width: 1152px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background-image: url("../images/Desktop\ -\ 1.svg");
+	box-sizing:border-box;
+	background-size: cover;
+	background-position: center;
+}
+
+.login-tab{
+	width:700px;
+	height:610px;
+	background: #0A0B0180;
+	border-radius:62px;
+	position:relative;
+	box-sizing:border-box;
+	padding:0;
+}
+
+.login-tab input {
+	color: white;
+}
+
+.login-tab input::placeholder {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.login-tab input:focus {
+	outline: 2px solid #c7d19772;
+}
+
+.login-row{position:absolute;left:0;right:0}
+
+.login-heading{
+	top:39.5px;
+	height:47px;
+	font-size:47px;
+	font-weight:600;
+	text-align:center;
+	color:#ffffff;
+	line-height:47px;
+	font-weight: bold;
+}
+
+.login-email{
+	width:520px;
+	height:47px;
+	left: calc(50% - 260px);
+	top: calc(39.5px + 30px + 95px);
+}
+
+.login-email input{
+	width:100%;
+	height:100%;
+	padding-left:17.5px;
+	padding-right:48px;
+	border-radius:17px;
+	font-size:16px;
+	box-sizing:border-box;
+	background-color: #373A27;
+}
+
+.login-password{
+	width:520px;
+	height:47px;
+	left: calc(50% - 260px);
+	top: calc(39.5px + 30px + 95px + 47px + 42px);
+}
+
+.login-password input{
+	width:100%;
+	height:100%;
+	padding-left:17.5px;
+	padding-right:56px;
+	border-radius:17px;
+	font-size:16px;
+	box-sizing:border-box;
+	background-color: #373A27;
+}
+
+.login-password{position:absolute}
+
+.password-toggle{
+	position:absolute;
+	top:50%;
+	transform:translateY(-50%);
+	right:17px;
+	width:28px;
+	height:28px;
+	background:transparent;
+	border:none;
+	padding:0;
+	cursor:pointer;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:5;
+}
+
+.password-toggle img{
+	display:block;
+	width:25px;
+	height:25px;
+	object-fit:contain;
+}
+
+input[type="password"]::-ms-clear,
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button {
+	display: none !important;
+}
+
+input[type="password"]::-webkit-outer-spin-button,
+input[type="password"]::-webkit-inner-spin-button{
+	-webkit-appearance: none; margin: 0;
+}
+
+input[type="password"]::-webkit-search-decoration,
+input[type="password"]::-webkit-search-cancel-button,
+input[type="password"]::-webkit-search-results-button,
+input[type="password"]::-webkit-search-results-decoration {
+	display: none;
+}
+
+input[type="password"]::-moz-placeholder {opacity:1}
+
+.login-password input{padding-right:56px}
+
+.login-action {
+	width:520px;
+	height:50px;
+	left: calc(50% - 260px);
+	top: calc(39.5px + 30px + 95px + 47px + 42px + 47px + 87px);
+}
+
+.login-action button {
+	width:100%;
+	height:100%;
+	background:#4D5C00;
+	color:#fff;
+	text-align:center;
+	border:none;
+	border-radius:8px;
+	font-size:24px;
+	cursor:pointer;
+	position: relative;
+	overflow: hidden;
+	transition: all 0.2s ease;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.login-action button::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 2px solid #d5ff04;
+	border-radius: 8px;
+	opacity: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	pointer-events: none;
+}
+
+.login-action button:hover {
+	box-shadow: 0 2px 0 #2f3800;
+}
+
+.login-action button:hover::after {
+	opacity: 1;
+}
+
+.login-action .btn-text{opacity:0.5}
+
+.login-signup{
+	top: calc(39.5px + 30px + 95px + 47px + 42px + 47px + 87px + 50px + 18px);
+	height:20px;
+	text-align:center;
+	color:#ffffff;
+	font-size:19px;
+}
+
+.login-signup a {
+	color:#d5ff01;
+	font-weight:400;
+	cursor:pointer;
+	position: relative;
+	text-decoration: none;
+}
+
+.login-signup a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	width: 0;
+	height: 1.5px;
+	background-color: #d5ff01;
+	transition: width 0.3s ease;
+}
+
+.login-signup a:hover::after {
+	width: 100%;
+}
+
+@media (max-width:420px){
+	.login-tab{padding:20px;border-radius:10px}
+	.login-heading{font-size:1.4rem}
+}
+
+.error-message {
+	color: #ff6b6b;
+	font-size: 14px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.loading {
+	opacity: 0.7;
+	cursor: not-allowed;
+}

@@ -1,0 +1,299 @@
+body {
+	font-family: "Zen Kaku Gothic Antique", sans-serif;
+  	font-weight: 400;
+  	font-style: normal;
+    color: #ffffff;
+}
+
+.bg-fullscreen {
+	min-height: 100vh;
+	min-width: 1152px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url("../images/Desktop\ -\ 1.svg");
+	box-sizing: border-box;
+	background-size: cover;
+	background-position: center;
+}
+
+.register-tab {
+	width: 590px;
+	height: 665px;
+	border-radius: 51.75px;
+	background: #0A0B0180;
+	position: relative;
+	box-sizing: border-box;
+}
+
+.register-tab .reg-heading {
+	position: absolute;
+	top: 42.55px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 370.3px;
+	height: 49.45px;
+	font-size: 39.1px;
+	line-height: 49.45px;
+	text-align: center;
+	font-weight: 700;
+    color: #ffffff;
+    text-transform: capitalize;
+}
+
+.register-tab .reg-subtext {
+	position: absolute;
+	top: 109.25px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 218.5px;
+	height: 16.1px;
+	font-size: 13.8px;
+	text-align: center;
+    color: #ffffff;
+    text-transform: capitalize;
+}
+
+.register-tab .reg-subtext .reg-login-link {
+	font-size: 13.8px;
+}
+
+.reg-login-link {
+	color: #d5ff01;
+	font-weight: 400;
+	cursor: pointer;
+	position: relative;
+	text-decoration: none;
+}
+
+.reg-login-link::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -2.3px;
+	width: 0;
+	height: 1.725px;
+	background-color: #d5ff01;
+	transition: width 0.3s ease;
+}
+
+.reg-login-link:hover::after {
+	width: 100%;
+}
+
+
+.register-tab .name-row {
+	position: absolute;
+	top: 172.5px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 438.15px;
+	height: 39.1px;
+	display: flex;
+	box-sizing: border-box;
+}
+
+.register-tab .name-field {
+	width: 210.45px;
+	height: 39.1px;
+	border-radius: 13.8px;
+}
+
+.register-tab input {
+	color: white;
+}
+
+.register-tab input::placeholder {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.register-tab input:focus {
+	outline: 2.3px solid #c7d19772;
+}
+
+.register-tab .name-field input {
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	padding: 0 10.35px;
+	box-sizing: border-box;
+	font-size: 13.8px;
+    background-color: #373A27;
+}
+
+.register-tab .name-row .last-name {
+	margin-left: 16.1px;
+}
+
+.register-tab .user-name-row {
+	position: absolute;
+	top: 247.25px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 438.15px;
+	height: 39.1px;
+}
+
+.register-tab .user-name-row input {
+	width: 100%;
+	height: 100%;
+	border-radius: 13.8px;
+	padding: 0 10.35px;
+	box-sizing: border-box;
+	font-size: 13.8px;
+    background-color: #373A27;
+}
+
+.register-tab .password-row {
+	position: absolute;
+	top: 322px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 438.15px;
+	height: 39.1px;
+}
+
+.register-tab .password-row input {
+	width: 100%;
+	height: 100%;
+	border-radius: 13.8px;
+	padding: 0 10.35px;
+	box-sizing: border-box;
+	font-size: 13.8px;
+    background-color: #373A27;
+}
+
+.password-toggle {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 19.55px;
+	width: 32.2px;
+	height: 32.2px;
+	background: transparent;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 5;
+}
+
+.password-toggle img {
+	display: block;
+	width: 28.75px;
+	height: 28.75px;
+	object-fit: contain;
+}
+
+input[type="password"]::-ms-clear,
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button {
+	display: none !important;
+}
+
+input[type="password"]::-webkit-outer-spin-button,
+input[type="password"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.register-tab .terms-row {
+	position: absolute;
+	top: 396.75px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 438.15px;
+	height: 19.45px;
+	display: flex;
+	align-items: center;
+	gap: 8.25px;
+}
+
+.register-tab .terms-row input {
+	width: 19.45px;
+	height: 19.45px;
+	cursor: pointer;
+}
+
+.register-tab .terms-row .terms-text {
+	font-size: 13.8px;
+	color: #ffffff;
+}
+
+.register-tab .terms-row .terms-text-link {
+	color: #d5ff01;
+	text-decoration: none;
+	position: relative;
+}
+
+.register-tab .terms-row .terms-text-link::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	width: 0;
+	height: 1px;
+	background-color: #d5ff01;
+	transition: width 0.3s ease;
+}
+
+.register-tab .terms-row .terms-text-link:hover::after {
+	width: 100%;
+}
+
+.register-tab .register-action {
+	position: absolute;
+	bottom: 42.55px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 438.15px;
+	height: 39.1px;
+}
+
+.register-tab .register-action .register-btn {
+	width: 100%;
+	height: 100%;
+	background: #4D5C00;
+	color: #ffffff;
+	border: none;
+	border-radius: 13.8px;
+	font-size: 16.55px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.register-tab .register-action .register-btn::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 2px solid #d5ff04;
+	border-radius: 13.8px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	pointer-events: none;
+}
+
+.register-tab .register-action .register-btn:hover {
+	box-shadow: 0 2px 0 #2f3800;
+}
+
+.register-tab .register-action .register-btn:hover::after {
+	opacity: 1;
+}
+
+.error-message {
+	color: #ff6b6b;
+	font-size: 12px;
+	margin-top: 5px;
+	text-align: center;
+}
+
+.loading {
+	opacity: 0.7;
+	cursor: not-allowed;
+}

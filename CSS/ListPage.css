@@ -1,0 +1,346 @@
+body {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-image: url("../images/Desktop\ -\ List.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    padding-top: 100px;
+}
+
+header {
+    width: 100%;
+    padding: 20px 60px;
+    box-sizing: border-box;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;      
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 20px 60px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.profile-icon {
+    position: relative;
+    top: 2px;
+    cursor: pointer;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 35%;
+    margin: 0 auto;
+    height: 39.2px;
+    top: 1px; 
+    left: 90px;
+    border-radius: 12px;
+    padding: 10px 30px 10px 20px;
+    background-color: #fdfdfdbf;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    color: #000;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+}
+
+.search-bar input::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.btn-primary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 31px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+}
+
+.search-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+.auth-icon {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.sign-in, .register, .add-project-btn {
+    position: relative;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    z-index: 0;
+    background: none;
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+}
+
+.sign-in {
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign-in::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2.5px solid #ff0404;
+    border-radius: 8px;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.sign-in:hover {
+    box-shadow: 0 2px 0 #4D5C00;
+}
+
+.sign-in:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sign-in img {
+    margin-left: 8px;
+    vertical-align: middle;
+    position: relative;
+}
+
+.register, .add-project-btn {
+    background-color: #4D5C00;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.register::after, .add-project-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid #d5ff04; 
+    border-radius: 8px;
+    opacity: 0;
+    transform: scale(1.15);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.register:hover, .add-project-btn:hover {
+    box-shadow: 0 2px 0 #2f3800;
+}
+
+.register:hover::after, .add-project-btn:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.add-project-btn img {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.header-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.header-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.header-content h1 span {
+    color: #D4E157;
+}
+
+.header-content p {
+    line-height: 1.6;
+    color: #d0d0d0;
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    gap: 40px;
+    padding: 60px 80px;
+    justify-items: center;
+}
+
+.card {
+    width: 370px;
+    height: 340px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #4D5C00;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+.card-content p {
+    margin: 0 0 15px 0;
+    color: #d0d0d0;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+.tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.tags span {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icons span, .icons a {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.icons span:hover, .icons a:hover {
+    opacity: 1;
+}
+
+.icons img {
+    width: 20px;
+    height: 20px;
+}
+
+.details-btn {
+    background-color: #d5ff01;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+}
+
+.details-btn:hover {
+    box-shadow: 0 2px 0 #4D5C00;
+}
+
+main {
+    min-height: calc(100vh - 200px);
+}
+
+.no-projects {
+    text-align: center;
+    padding: 60px 20px;
+    color: #d0d0d0;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #d5ff01;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .search-bar {
+        width: 100%;
+        left: 0;
+        margin: 10px 0;
+    }
+
+    .header-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .projects {
+        padding: 40px 20px;
+        gap: 20px;
+    }
+}
